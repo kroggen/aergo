@@ -6,9 +6,13 @@ name: Build and Test
 on:
   workflow_dispatch:
   pull_request:
-    branches:
-      - master
-      - develop
+    types:
+      - opened
+      - reopened
+      - synchronize
+  pull_request_target:
+    types:
+      - edited
   push:
     branches:
       - master
