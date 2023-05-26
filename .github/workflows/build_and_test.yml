@@ -5,6 +5,7 @@ name: Build and Test
 
 on:
   workflow_dispatch:
+  push:
   pull_request:
     types:
       - opened
@@ -13,9 +14,6 @@ on:
   pull_request_target:
     types:
       - edited
-  push:
-    branches:
-      - '*'
 
 jobs:
   build_and_test:
