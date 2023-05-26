@@ -15,7 +15,7 @@ on:
       - edited
   push:
     branches:
-      - *
+      - '*'
 
 jobs:
   build_and_test:
