@@ -1,0 +1,35 @@
+name: Short Unit Tests
+
+on:
+  push:
+    branches-ignore: # master and develop run complete test by other workflow
+      - master
+      - develop
+
+jobs:
+  build_and_test:
+    if: github.event_name != 'pull_request'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get install -y jq m4 make cmake
+
+    - name: Build
+      run: make
+
+    - name: Short Unit Tests
+      run: go test -short -timeout 999s -v ./...
