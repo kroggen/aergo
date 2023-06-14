@@ -5,6 +5,7 @@ name: Build and Test
 
 on:
   workflow_dispatch:
+  push:
   pull_request:
     types:
       - opened
@@ -13,10 +14,6 @@ on:
   pull_request_target:
     types:
       - edited
-  push:
-    branches:
-      - master
-      - develop
 
 jobs:
   build_and_test:
@@ -41,10 +38,16 @@ jobs:
     - name: Build
       run: make
 
-    - name: Unit Tests
+    - name: Complete Unit Tests
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
       run: go test -v ./...
 
+    - name: Short Unit Tests
+      if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop'
+      run: go test -short -timeout 999s -v ./...
+
     - name: Integration Tests
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
       run: |
         if [ -d "tests" ]; then
           cd tests
